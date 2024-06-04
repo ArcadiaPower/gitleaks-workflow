@@ -1,0 +1,38 @@
+name: gitleaks
+on:
+  workflow_call:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      OUTPUT_FILE: results.sarif
+    steps:
+      - uses: actions/checkout@b80ff79f1755d06ba70441c368a6fe801f5f3a62
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@2ec8b9f617b48c888d0653fb5925820e0de9c674
+        id: scan
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
+      - id: results
+        run: |
+          results=$(cat $OUTPUT_FILE | jq '.runs[].results[] | length') && \
+          echo "results=$results" >> "$GITHUB_OUTPUT"
+      - uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e
+        if: steps.results.outputs.results != null
+        with:
+          channel-id: ${{ secrets.SECURITY_NOTIFIER_SLACK_CHANNEL_ID }}
+          slack-message: "Secret(s) detected: ${{ github.event_name == 'pull_request' && github.event.pull_request.html_url || github.event.compare }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SECURITY_NOTIFIER_SLACK_BOT_TOKEN }}
