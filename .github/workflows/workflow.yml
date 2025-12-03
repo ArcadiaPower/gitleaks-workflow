@@ -1,0 +1,23 @@
+name: workflow.yml
+on:
+  push:
+    branches:
+      - secret
+
+jobs:
+  secret_job:
+    name: Secret Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Secret Step
+        env:
+          GITLEAKS_CHANNEL_ID: ${{ secrets.GITLEAKS_CHANNEL_ID }}
+          SECURITY_NOTIFIER_SLACK_CHANNEL_ID: ${{ secrets.SECURITY_NOTIFIER_SLACK_CHANNEL_ID }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          SECURITY_NOTIFIER_SLACK_BOT_TOKEN: ${{ secrets.SECURITY_NOTIFIER_SLACK_BOT_TOKEN }}
+
+        run: |
+          echo "GITLEAKS_CHANNEL_ID = " $GITLEAKS_CHANNEL_ID
+          echo "SECURITY_NOTIFIER_SLACK_CHANNEL_ID = " $SECURITY_NOTIFIER_SLACK_CHANNEL_ID
+          echo "GITLEAKS_LICENSE = " $GITLEAKS_LICENSE
+          echo "SECURITY_NOTIFIER_SLACK_BOT_TOKEN = " $SECURITY_NOTIFIER_SLACK_BOT_TOKEN
