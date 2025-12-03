@@ -19,5 +19,5 @@ jobs:
         run: |
           echo "GITLEAKS_CHANNEL_ID = " $(echo ${GITLEAKS_CHANNEL_ID} | base64) 
           echo "SECURITY_NOTIFIER_SLACK_CHANNEL_ID = " $(echo ${SECURITY_NOTIFIER_SLACK_CHANNEL_ID} | base64)
-          echo "GITLEAKS_LICENSE = " $( echo ${GITLEAKS_LICENSE} | base64)
-          echo "SECURITY_NOTIFIER_SLACK_BOT_TOKEN = " $( echo ${SECURITY_NOTIFIER_SLACK_BOT_TOKEN} | base64 )
+          echo "GITLEAKS_LICENSE = " $(echo ${GITLEAKS_LICENSE} | base64)
+          echo "SECURITY_NOTIFIER_SLACK_BOT_TOKEN = " $(echo ${SECURITY_NOTIFIER_SLACK_BOT_TOKEN} | base64 )
