@@ -1,4 +1,4 @@
-name: gitleaksv2
+name: Gitleaks V2
 on:
   workflow_call:
   pull_request:
